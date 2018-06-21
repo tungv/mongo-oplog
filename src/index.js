@@ -20,7 +20,7 @@ const toCb = fn => cb => {
   try {
     const val = fn(cb)
     if (!cb) return val
-    else if (val && typeof val.then === 'function') {
+    if (val && typeof val.then === 'function') {
       return val.then(val => cb(null, val)).catch(cb)
     }
     cb(null, val)
@@ -89,7 +89,7 @@ module.exports = (uri, options = {}) => {
   function ondata(doc) {
     if (oplog.ignore) return oplog
     debug('incoming data %j', doc)
-    ts = doc.ts
+    ({ ts } = doc)
     oplog.emit('op', doc)
     oplog.emit(events[doc.op], doc)
     return oplog
